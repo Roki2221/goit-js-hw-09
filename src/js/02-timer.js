@@ -3,14 +3,16 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
 let chosenDate = null;
+let timerId = null;
 const dateInput = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('button[data-start]');
 const daysSpan = document.querySelector('span[data-days]');
 const hoursSpan = document.querySelector('span[data-hours]');
 const minutesSpan = document.querySelector('span[data-minutes]');
 const secondsSpan = document.querySelector('span[data-seconds]');
-
+const resetBtn = document.querySelector('button[data-reset]');
 startBtn.setAttribute('disabled', 'true');
+resetBtn.setAttribute('disabled', 'true');
 
 const options = {
   enableTime: true,
@@ -59,7 +61,9 @@ function addLeadingZero(date) {
 }
 
 function handleClick() {
-  let timerId = setInterval(() => {
+  dateInput.setAttribute('disabled', 'true');
+  resetBtn.removeAttribute('disabled');
+  timerId = setInterval(() => {
     let currentDate = new Date();
     let delTime = chosenDate.getTime() - currentDate.getTime();
     if (delTime <= 0) {
@@ -74,4 +78,15 @@ function handleClick() {
   }, 1000);
 }
 
+function resetClick() {
+  dateInput.removeAttribute('disabled');
+  dateInput.value = '';
+  clearInterval(timerId);
+  daysSpan.textContent = '00';
+  hoursSpan.textContent = '00';
+  minutesSpan.textContent = '00';
+  secondsSpan.textContent = '00';
+}
+
 startBtn.addEventListener('click', handleClick);
+resetBtn.addEventListener('click', resetClick);

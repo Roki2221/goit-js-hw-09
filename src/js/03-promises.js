@@ -18,7 +18,9 @@ function handleSubmit(event) {
   const firstDelay = form.elements.delay.value;
   const amount = form.elements.amount.value;
   const step = form.elements.step.value;
-
+  if (firstDelay < 0 || amount <= 0 || step < 0) {
+    return Notiflix.Notify.failure(`Sorry, unexpected values!`);
+  }
   for (let i = 0; i < amount; i += 1) {
     const timerId = setTimeout(() => {
       createPromise(i + 1, +firstDelay + i * step)
